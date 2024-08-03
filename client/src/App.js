@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useScrollReval from './hooks/useScrollReveal';
 import RouteListStack from './components/RouteListStack';
 import RouteListGroup from './components/RouteListGroup';
 import Logo from './components/Logo';
 import { version } from '../package.json';
 
-import { buildRoute, deleteRoute } from './utils/routes-api';
+import { buildRoute, deleteRoute, geteRoute } from './utils/routes-api';
 
 import RouteModal from './components/RouteModal';
 import SettingsModal from './components/SettingsModal';
@@ -21,11 +21,31 @@ export default function ({ settings: propSettings, customRoutes }) {
   const [selectedRoute, setSelectedRoute] = useState();
   const [routeToBeRemoved, setRouteToBeRemoved] = useState();
   const [settingsModalVisible, showSettingsModal] = useState(false);
+  const [routes, setRoutes] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
-  const routes = customRoutes || configRoutes;
+  useEffect(() => {
+    async function fetchRoutes() {
+      try {
+        const fetchedRoutes = await geteRoute();
+        const getData = await fetchedRoutes.json()
+        setRoutes(getData ? getData : [])
+      } catch (error) {
+        console.error('Error fetching routes:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetch completes
+      }
+    }
+
+    fetchRoutes();
+  }, [customRoutes, configRoutes]);
 
   const { features: { chaosMonkey = false, groupedRoutes = false } = {} } =
     propSettings || settings;
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>

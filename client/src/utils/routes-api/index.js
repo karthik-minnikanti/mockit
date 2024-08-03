@@ -41,6 +41,20 @@ export const deleteRoute = async (data) => {
   });
 };
 
+
+export const geteRoute = async (data) => {
+  const rotues =  await fetch(url.resolve(host, '/route'), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  console.log("---", rotues)
+
+  return rotues
+};
+
+
 export const updateSettings = async (settings) => {
   return await fetch(url.resolve(host, '/settings'), {
     method: 'POST',
