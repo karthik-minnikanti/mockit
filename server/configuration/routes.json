@@ -1,0 +1,15 @@
+{
+    "settings": {
+        "features": {
+            "chaosMonkey": false,
+            "groupedRoutes": false,
+            "cors": true,
+            "authentication": false
+        },
+        "authentication": {
+            "username": "test",
+            "password": "test"
+        }
+    },
+    "routes": []
+}

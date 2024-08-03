@@ -1,31 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useScrollReval from './hooks/useScrollReveal';
 import RouteListStack from './components/RouteListStack';
 import RouteListGroup from './components/RouteListGroup';
 import Logo from './components/Logo';
 import { version } from '../package.json';
 
-import { buildRoute, deleteRoute } from './utils/routes-api';
+import { buildRoute, deleteRoute, geteRoute, getSettings } from './utils/routes-api';
 
 import RouteModal from './components/RouteModal';
 import SettingsModal from './components/SettingsModal';
 import ConfirmationDialog from './components/ConfirmationDialog';
 
-import { settings, routes as configRoutes } from './config/routes.json';
+import { routes as configRoutes } from './config/routes.json';
 
 import './scss/index.scss';
 
-export default function ({ settings: propSettings, customRoutes }) {
+export default function ({ customRoutes }) {
   useScrollReval([{ selector: '.hero .title, .card, .subtitle ' }]);
 
   const [selectedRoute, setSelectedRoute] = useState();
   const [routeToBeRemoved, setRouteToBeRemoved] = useState();
   const [settingsModalVisible, showSettingsModal] = useState(false);
+  const [routes, setRoutes] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
+  const [settings, setSettings] = useState({})
 
-  const routes = customRoutes || configRoutes;
+  useEffect(() => {
+    async function fetchRoutes() {
+      try {
+        const fetchedRoutes = await geteRoute();
+        const fetchedSettings = await getSettings()
+        const setingsData = fetchedSettings.json()
+        setSettings(setingsData)
+        const getData = await fetchedRoutes.json()
+        setRoutes(getData ? getData : [])
+      } catch (error) {
+        console.error('Error fetching routes:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetch completes
+      }
+    }
 
-  const { features: { chaosMonkey = false, groupedRoutes = false } = {} } =
-    propSettings || settings;
+    fetchRoutes();
+  }, [customRoutes, configRoutes]);
+
+  const { features: { chaosMonkey = false, groupedRoutes = true } = {} } = settings;
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -51,15 +74,6 @@ export default function ({ settings: propSettings, customRoutes }) {
             </a>
           </div>
         </nav>
-
-        <div className="hero-body">
-          <div className="container has-text-centered">
-            <Logo />
-            <p className="subtitle">
-              A tool to quickly mock out end points, setup delays and more...
-            </p>
-          </div>
-        </div>
       </section>
 
       {selectedRoute && (
@@ -83,7 +97,7 @@ export default function ({ settings: propSettings, customRoutes }) {
       )}
 
       {settingsModalVisible && (
-        <SettingsModal onClose={() => showSettingsModal(false)} />
+        <SettingsModal settings={settings} onClose={() => showSettingsModal(false)} />
       )}
 
       <main>

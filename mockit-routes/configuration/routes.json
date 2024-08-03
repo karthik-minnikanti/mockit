@@ -1,109 +1,233 @@
 {
-  "settings": {
-    "features": {
-      "chaosMonkey": false,
-      "cors": true,
-      "authentication": false
-    },
-    "authentication": {
-      "username": "test",
-      "password": "test"
-    }
-  },
-  "routes": [
-    {
-      "id": "b0e91a33-787c-4d54-8c58-10ac970e2865",
-      "route": "/user",
-      "httpMethod": "GET",
-      "statusCode": "200",
-      "delay": "0",
-      "payload": {
-        "name": "Ellen Emard",
-        "username": "Mohamed.Pfeffer84",
-        "email": "Chauncey14@yahoo.com",
-        "address": {
-          "street": "Durgan Locks",
-          "suite": "Apt. 331",
-          "city": "West Sid",
-          "zipcode": "16439",
-          "geo": {
-            "lat": "-65.7730",
-            "lng": "-140.2122"
-          }
+    "settings": {
+        "features": {
+            "chaosMonkey": false,
+            "groupedRoutes": true,
+            "cors": true,
+            "authentication": false
         },
-        "phone": "024.912.5659 x5359",
-        "website": "osborne.net",
-        "company": {
-          "name": "Barrows - Jakubowski",
-          "catchPhrase": "Programmable client-server parallelism",
-          "bs": "integrated whiteboard e-markets"
+        "authentication": {
+            "username": "test",
+            "password": "test"
         }
-      },
-      "disabled": true
     },
-    {
-      "id": "bd8893f7-68d5-4090-8ae2-20529191cd88",
-      "route": "/random",
-      "httpMethod": "GET",
-      "statusCode": "200",
-      "delay": "0",
-      "headers": [
+    "routes": [
         {
-          "header": "x-testing",
-          "value": "tester"
+            "id": "d4b07c6b-69c6-441b-ba1c-2259f3202fca",
+            "route": "/test",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "name": "Carolina Streich",
+                "username": "Brionna_Ratke",
+                "email": "Anya_Collins@yahoo.com",
+                "address": {
+                    "street": "Otilia Ford",
+                    "suite": "Suite 318",
+                    "city": "Lemketon",
+                    "zipcode": "30872-5270",
+                    "geo": {
+                        "lat": "-49.9512",
+                        "lng": "-46.7559"
+                    }
+                },
+                "phone": "1-135-091-7386",
+                "website": "kyleigh.org",
+                "company": {
+                    "name": "Hegmann, Stiedemann and Corwin",
+                    "catchPhrase": "Quality-focused zero administration initiative",
+                    "bs": "vertical transition architectures"
+                }
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [
+                {
+                    "id": "dc24bea0-5b87-45d3-ae7d-5b8da14ff624",
+                    "condition": "fddsfsdfdsfs",
+                    "responses": [
+                        {
+                            "id": "86f3c7fd-4a3a-4238-abe7-74077e3467c2",
+                            "statusCode": "",
+                            "body": {}
+                        }
+                    ]
+                },
+                {
+                    "id": "7b956e6a-68a6-4828-9fd2-82e8644461bc",
+                    "condition": "fdsdffsfds",
+                    "responses": [
+                        {
+                            "id": "1bb5677b-4f1b-4110-bb6b-b298e3944ff5",
+                            "statusCode": "",
+                            "body": {}
+                        }
+                    ]
+                }
+            ],
+            "proxyUrl": ""
         },
         {
-          "header": "x-testing2",
-          "value": "tester2"
+            "id": "1b8036e5-5319-4a69-8631-15d53a8706d8",
+            "route": "/testrwrw",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [
+                {
+                    "id": "88218500-079f-438a-b799-8df888b5cea7",
+                    "condition": "fds dsfdfddfsds",
+                    "responses": [
+                        {
+                            "id": "267fda35-0924-42e3-9d99-b61d5b5f613e",
+                            "statusCode": "",
+                            "body": {}
+                        }
+                    ]
+                }
+            ],
+            "proxyUrl": ""
         },
         {
-          "header": "x-testing3",
-          "value": "tester3"
+            "id": "a912c1fa-1f72-4d37-8b1f-007a8e671215",
+            "route": "/newRoute",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": false
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
+            "proxyUrl": ""
+        },
+        {
+            "id": "f5dc5e70-c77a-4b0f-8481-97cf2f682f2a",
+            "route": "/test-post",
+            "httpMethod": "POST",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": "default:"
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [
+                {
+                    "id": "831139a7-7c57-4f5c-ad59-1404a4c916e3",
+                    "condition": "false",
+                    "responses": [
+                        {
+                            "id": "6c877e76-a260-4dba-852e-97403deb6136",
+                            "statusCode": "",
+                            "body": {
+                                "test": false
+                            }
+                        }
+                    ]
+                }
+            ],
+            "proxyUrl": "https://api.restful-api.dev/objects"
+        },
+        {
+            "id": "7ffa6fbf-d0de-4b3f-a2c2-d6e9a8e842bc",
+            "route": "/test/test-group",
+            "httpMethod": "POST",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
+            "proxyUrl": ""
+        },
+        {
+            "id": "b5e594bc-09fe-407b-8ec0-efed0792d04b",
+            "route": "/test/aadhaar",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
+            "proxyUrl": ""
+        },
+        {
+            "id": "dc1f838b-82f5-4760-be94-d7721a36908f",
+            "route": "/test/rewrwrwerw",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [
+                {
+                    "id": "ddac2512-f8c6-42f0-9170-fa55d1ddeec7",
+                    "condition": "Rewqrwrwe",
+                    "responses": [
+                        {
+                            "id": "880e9ed1-55da-4339-a2f7-77ac0f8216cc",
+                            "statusCode": "",
+                            "body": {}
+                        }
+                    ]
+                }
+            ],
+            "proxyUrl": ""
+        },
+        {
+            "id": "364d65f6-6668-41d9-872d-82330d498d9d",
+            "route": "/test/test2",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [
+                {
+                    "id": "3f0426fb-8685-4ec8-bf20-f251cbdd4f9d",
+                    "condition": "adfsf fdsfds",
+                    "responses": [
+                        {
+                            "id": "2088f585-e546-4fad-8a59-e6886af98f1d",
+                            "statusCode": "",
+                            "body": {
+                                "test": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "4cfc725f-ed57-4db8-bd76-7bfa79e83e8b",
+                    "condition": "fdsfdsfdsfd",
+                    "responses": [
+                        {
+                            "id": "cd4af622-75a8-45a4-930a-b517ee430266",
+                            "statusCode": "",
+                            "body": {}
+                        }
+                    ]
+                }
+            ],
+            "proxyUrl": ""
         }
-      ],
-      "payload": {
-        "name": "Fanny Rath",
-        "username": "Adell.Adams",
-        "email": "Clair30@yahoo.com",
-        "address": {
-          "street": "Carroll Meadow",
-          "suite": "Suite 114",
-          "city": "West Astrid",
-          "zipcode": "02752",
-          "geo": {
-            "lat": "-3.4480",
-            "lng": "86.2320"
-          }
-        },
-        "phone": "527.926.2249 x635",
-        "website": "evans.biz",
-        "company": {
-          "name": "Mills - Schinner",
-          "catchPhrase": "Profound clear-thinking array",
-          "bs": "compelling disintermediate mindshare"
-        }
-      },
-      "disabled": false
-    },
-    {
-      "id": "56477240-796b-4fa5-bfa2-d09d804e3d24",
-      "route": "/newRoute",
-      "httpMethod": "GET",
-      "statusCode": "200",
-      "delay": "1000",
-      "payload": {
-        "test": true
-      }
-    },
-    {
-      "id": "686819df-9cd4-4814-a75a-39f65ea76b8e",
-      "route": "/newRoute",
-      "httpMethod": "GET",
-      "statusCode": "200",
-      "delay": "0",
-      "payload": {
-        "test": true
-      }
-    }
-  ]
+    ]
 }

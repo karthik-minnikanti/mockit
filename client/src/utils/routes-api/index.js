@@ -41,6 +41,18 @@ export const deleteRoute = async (data) => {
   });
 };
 
+
+export const geteRoute = async (data) => {
+  const rotues =  await fetch(url.resolve(host, '/route'), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  return rotues
+};
+
+
 export const updateSettings = async (settings) => {
   return await fetch(url.resolve(host, '/settings'), {
     method: 'POST',
@@ -48,5 +60,14 @@ export const updateSettings = async (settings) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(settings)
+  });
+};
+
+export const getSettings = async () => {
+  return await fetch(url.resolve(host, '/settings'), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   });
 };

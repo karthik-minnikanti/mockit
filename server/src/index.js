@@ -104,6 +104,16 @@ app.post('/settings', async (req, res) => {
   return res.sendStatus(204);
 });
 
+app.get('/settings', async (req, res) => {
+  const config = await getConfig();
+  return res.json(config?.settings);
+});
+
+app.get('/route', async (req, res) => {
+  const config = await getConfig();
+  return res.json(config?.routes);
+});
+
 if (process.env.ENV !== 'test') {
   server = app.listen(port, () =>
     console.log(`Example app listening on port ${port}!`)
