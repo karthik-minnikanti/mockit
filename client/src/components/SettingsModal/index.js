@@ -6,9 +6,11 @@ const SettingsModal = function ({
   onClose = () => {},
   onConfirm = () => {},
   heading,
-  children
+  children,
+  settings: propSettings
 } = {}) {
-  const [settings, setSettings] = useState(applicationSettings);
+
+  let [settings, setSettings] = useState(applicationSettings);
 
   const {
     features: { chaosMonkey, cors, authentication, groupedRoutes } = {}

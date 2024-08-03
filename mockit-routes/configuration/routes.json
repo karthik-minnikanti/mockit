@@ -2,6 +2,7 @@
     "settings": {
         "features": {
             "chaosMonkey": false,
+            "groupedRoutes": true,
             "cors": true,
             "authentication": false
         },
@@ -134,6 +135,34 @@
                 }
             ],
             "proxyUrl": "https://api.restful-api.dev/objects"
+        },
+        {
+            "id": "7ffa6fbf-d0de-4b3f-a2c2-d6e9a8e842bc",
+            "route": "/test/test-group",
+            "httpMethod": "POST",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
+            "proxyUrl": ""
+        },
+        {
+            "id": "b5e594bc-09fe-407b-8ec0-efed0792d04b",
+            "route": "/test/aadhaar",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
+            "proxyUrl": ""
         }
     ]
 }

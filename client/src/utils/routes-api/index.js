@@ -62,3 +62,12 @@ export const updateSettings = async (settings) => {
     body: JSON.stringify(settings)
   });
 };
+
+export const getSettings = async () => {
+  return await fetch(url.resolve(host, '/settings'), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+};

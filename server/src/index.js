@@ -104,6 +104,11 @@ app.post('/settings', async (req, res) => {
   return res.sendStatus(204);
 });
 
+app.get('/settings', async (req, res) => {
+  const config = await getConfig();
+  return res.json(config?.settings);
+});
+
 app.get('/route', async (req, res) => {
   const config = await getConfig();
   return res.json(config?.routes);
