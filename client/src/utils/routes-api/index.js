@@ -49,8 +49,6 @@ export const geteRoute = async (data) => {
       'Content-Type': 'application/json'
     }
   });
-  console.log("---", rotues)
-
   return rotues
 };
 

@@ -7,7 +7,6 @@ const Routes = function ({
   onRouteEdit = () => {},
   onRouteDelete = () => {}
 }) {
-  console.log("----", routes)
   return (
     <div aria-label="routes-stacked">
       {routes.map((route, key) => (

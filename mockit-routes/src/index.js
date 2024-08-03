@@ -47,25 +47,20 @@ routes.forEach((route) => {
 
   if (!disabled) {
     app[method](path, async (req, res) => {
-      console.log('Request Body:', req.body);
-
       let isConditionMet = false;
       let response = null;
     
       for (const conditionData of conditions) {    
         if (JSON.stringify(req.body)?.includes(conditionData?.condition)) {
           isConditionMet = true;
-          console.log(conditionData)
           response = conditionData.responses[0]?.body;
           break;
         }
       }
     
       if (isConditionMet) {
-        console.log("-----2")
         return res.status(statusCode).send(response);
       } else {
-        console.log("-----")
         if(proxyUrl) {
 
           const proxyResponse = await axios({

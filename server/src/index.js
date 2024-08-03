@@ -106,35 +106,8 @@ app.post('/settings', async (req, res) => {
 
 app.get('/route', async (req, res) => {
   const config = await getConfig();
-  console.log("-----", config)
   return res.json(config?.routes);
 });
-
-// app.get('/route', async (req, res) => {
-//   try {
-//     const configStream = await getConfig(); // Assume this returns a readable stream
-
-//     // Create a buffer to collect stream data
-//     const buffer = [];
-
-//     // Collect the data from the stream
-//     configStream.on('data', chunk => buffer.push(chunk));
-//     configStream.on('end', () => {
-//       // Convert buffer to a single string and then parse it as JSON
-//       const configData = JSON.parse(Buffer.concat(buffer).toString());
-//       res.json(configData?.routes); // Send the data as JSON
-//     });
-
-//     // Handle stream errors
-//     configStream.on('error', error => {
-//       console.error('Error with stream:', error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//     });
-//   } catch (error) {
-//     console.error('Error fetching config:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 
 if (process.env.ENV !== 'test') {
   server = app.listen(port, () =>
