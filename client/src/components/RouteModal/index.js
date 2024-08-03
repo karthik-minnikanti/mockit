@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import HeaderInput from '../HeaderInput';
 import { HttpMethods, StatusCodes } from '../../utils/consts';
@@ -43,8 +43,9 @@ const Modal = function (props) {
   const [conditions, updateConditions] = useState(editedRoute.conditions || []);
   const [proxyUrl, updateProxyUrl] = useState(editedRoute.proxyUrl || '');
 
-  const isNewRoute = editedRoute.id === undefined;
+  const [expandedConditions, setExpandedConditions] = useState({});
 
+  const isNewRoute = editedRoute.id === undefined;
   const modalTitle = isNewRoute ? 'Add Route' : 'Edit Route';
 
   const setHeader = (updatedHeader) => {
@@ -76,19 +77,6 @@ const Modal = function (props) {
     updateConditions(updatedConditions);
   };
 
-  const removeResponseFromCondition = (conditionId, responseId) => {
-    const updatedConditions = conditions.map((condition) => {
-      if (condition.id === conditionId) {
-        return {
-          ...condition,
-          responses: condition.responses.filter((response) => response.id !== responseId)
-        };
-      }
-      return condition;
-    });
-    updateConditions(updatedConditions);
-  };
-
   const saveChanges = async () => {
     try {
       const cleanedHeaders = headers.filter(({ header, value }) => header !== '' && value !== '');
@@ -112,7 +100,37 @@ const Modal = function (props) {
     }
   };
 
+
+  const removeResponseFromCondition = (conditionId, responseId) => {
+    const updatedConditions = conditions.map((condition) => {
+      if (condition.id === conditionId) {
+        return {
+          ...condition,
+          responses: condition.responses.filter((response) => response.id !== responseId)
+        };
+      }
+      return condition;
+    });
+    updateConditions(updatedConditions);
+  };
+
+  const toggleConditionExpand = (conditionId) => {
+    setExpandedConditions(prev => ({
+      ...prev,
+      [conditionId]: !prev[conditionId]
+    }));
+  };
+
   const statusCodeStartingWith = (startingNumber) => STATUS_CODES.filter((routeStatusCode) => routeStatusCode.startsWith(startingNumber));
+
+  const renderConditionTitle = (condition) => {
+    const isExpanded = expandedConditions[condition.id];
+    return (
+      <div className="condition-header" onClick={() => toggleConditionExpand(condition.id)}>
+        {isExpanded ? '−' : '+'} {condition.condition || 'Add Condition'}
+      </div>
+    );
+  };
 
   return (
     <div className="modal is-active" data-testid="route-modal">
@@ -263,100 +281,105 @@ const Modal = function (props) {
               {conditions.length === 0 && <i>No conditions added.</i>}
               {conditions.map((condition) => (
                 <div key={condition.id} className="field mt10">
-                  <div className="control">
-                    <div className="field">
-                      <label className="label">Condition</label>
-                      <input
-                        aria-label="condition"
-                        className="input"
-                        type="text"
-                        value={condition.condition}
-                        onChange={(e) =>
-                          updateConditions(
-                            conditions.map((c) =>
-                              c.id === condition.id
-                                ? { ...c, condition: e.currentTarget.value }
-                                : c
-                            )
-                          )
-                        }
-                      />
-                    </div>
-                    {condition.responses.map((response) => (
-                      <div key={response.id} className="field mt10">
-                        <label className="label">Response</label>
-                        <div className="control">
-                          <div className="field">
-                            <label className="label">Status Code</label>
+                  {renderConditionTitle(condition)}
+                  {expandedConditions[condition.id] && (
+                    <>
+                      <div className="control">
+                        <div className="field">
+                          <label className="label">Condition</label>
+                          <input
+                            aria-label="condition"
+                            className="input"
+                            type="text"
+                            value={condition.condition}
+                            onChange={(e) =>
+                              updateConditions(
+                                conditions.map((c) =>
+                                  c.id === condition.id
+                                    ? { ...c, condition: e.currentTarget.value }
+                                    : c
+                                )
+                              )
+                            }
+                          />
+                        </div>
+                        {condition.responses.map((response) => (
+                          <div key={response.id} className="field mt10">
+                            <label className="label">Response</label>
                             <div className="control">
-                              <div className="select">
-                                <select
-                                  aria-label="condition-response-statuscode"
-                                  value={response.statusCode || ''}
+                              <div className="field">
+                                <label className="label">Status Code</label>
+                                <div className="control">
+                                  <div className="select">
+                                    <select
+                                      aria-label="condition-response-statuscode"
+                                      value={response.statusCode || ''}
+                                      onChange={(e) =>
+                                        updateResponse(condition.id, response.id, {
+                                          statusCode: e.currentTarget.value
+                                        })
+                                      }
+                                    >
+                                      {STATUS_CODES.map((statusCode) => (
+                                        <option key={statusCode} value={statusCode}>
+                                          {statusCode}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="field">
+                                <label className="label">Response Body</label>
+                                <JSONInput
+                                  placeholder={response.body || {}}
                                   onChange={(e) =>
                                     updateResponse(condition.id, response.id, {
-                                      statusCode: e.currentTarget.value
+                                      body: e.jsObject
                                     })
                                   }
-                                >
-                                  {STATUS_CODES.map((statusCode) => (
-                                    <option key={statusCode} value={statusCode}>
-                                      {statusCode}
-                                    </option>
-                                  ))}
-                                </select>
+                                  height="120px"
+                                  width="100%"
+                                  locale="en-gb"
+                                />
                               </div>
+                              <button
+                                className="button is-danger is-small mt5"
+                                onClick={() => removeResponseFromCondition(condition.id, response.id)}
+                              >
+                                Remove Response
+                              </button>
                             </div>
                           </div>
-                          <div className="field">
-                            <label className="label">Response Body</label>
-                            <JSONInput
-                              placeholder={response.body || {}}
-                              onChange={(e) =>
-                                updateResponse(condition.id, response.id, {
-                                  body: e.jsObject
-                                })
-                              }
-                              height="120px"
-                              width="100%"
-                              locale="en-gb"
-                            />
-                          </div>
-                          <button
-                            className="button is-danger is-small mt5"
-                            onClick={() => removeResponseFromCondition(condition.id, response.id)}
-                          >
-                            Remove Response
-                          </button>
-                        </div>
+                        ))}
+                        <button
+                          aria-label="add-response"
+                          className="button is-small is-primary mt5"
+                          onClick={() => updateConditions(
+                            conditions.map((c) =>
+                              c.id === condition.id
+                                ? {
+                                    ...c,
+                                    responses: [
+                                      ...c.responses,
+                                      { id: uuid(), statusCode: '', body: {} }
+                                    ]
+                                  }
+                                : c
+                            )
+                          )}
+                        >
+                          Add Response
+                        </button>
+                        <button
+                          className="button is-danger is-small mt5"
+                          onClick={() => removeCondition(condition.id)}
+                        >
+                          Remove Condition
+                        </button>
                       </div>
-                    ))}
-                    <button
-                      aria-label="add-response"
-                      className="button is-small is-primary mt5"
-                      onClick={() => updateConditions(
-                        conditions.map((c) =>
-                          c.id === condition.id
-                            ? {
-                                ...c,
-                                responses: [
-                                  ...c.responses,
-                                  { id: uuid(), statusCode: '', body: {} }
-                                ]
-                              }
-                            : c
-                        )
-                      )}
-                    >
-                      Add Response
-                    </button>
-                    <button
-                      className="button is-danger is-small mt5"
-                      onClick={() => removeCondition(condition.id)}
-                    >
-                      Remove Condition
-                    </button>
-                  </div>
+                    </>
+                  )}
                 </div>
               ))}
               <button
