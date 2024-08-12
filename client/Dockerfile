@@ -5,7 +5,7 @@ WORKDIR /usr/src/mockit-client
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm ci
+RUN npm i
 
 COPY . ./
 

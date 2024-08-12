@@ -6,7 +6,7 @@ WORKDIR /usr/src/mockit-routes
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm ci
+RUN npm i
 
 COPY . .
 

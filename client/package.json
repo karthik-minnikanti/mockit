@@ -9,6 +9,7 @@
     "lodash": "^4.17.11",
     "node-sass": "^4.11.0",
     "react": "v16.8.3",
+    "react-ace": "^12.0.0",
     "react-dom": "v16.8.3",
     "react-json-editor-ajrm": "^2.5.9",
     "react-scripts": "3.0.0",
@@ -17,7 +18,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3225 react-scripts start",
     "build": "react-scripts build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"

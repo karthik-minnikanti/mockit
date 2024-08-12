@@ -67,6 +67,38 @@
                 }
             ],
             "proxyUrl": ""
+        },
+        {
+            "id": "2ac7c58d-9de8-47c0-8bcc-60afa135d6c9",
+            "route": "/test/xml",
+            "httpMethod": "POST",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bookstore>\n  <book category=\"cooking\">\n    <title lang=\"en\">Everyday Italian</title>\n    <author>Giada De Laurentiis</author>\n    <year>2005</year>\n    <price>30.00</price>\n  </book>\n  <book category=\"children\">\n    <title lang=\"en\">Harry Potter</title>\n    <author>J K. Rowling</author>\n    <year>2005</year>\n    <price>29.99</price>\n  </book>\n  <book category=\"web\">\n    <title lang=\"en\">Learning XML</title>\n    <author>Erik T. Ray</author>\n    <year>2003</year>\n    <price>39.95</price>\n  </book>\n</bookstore>",
+            "responseType": "xml",
+            "disabled": false,
+            "headers": [],
+            "conditions": [
+                {
+                    "id": "8fda3d9b-8119-4ba6-bb4d-798f47719df2",
+                    "condition": "Test",
+                    "responses": [
+                        {
+                            "id": "3e9e730e-49da-4507-815f-db021e093f17",
+                            "statusCode": "",
+                            "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n  <note>\n  <to>Tove</to>\n  <from>Jani</from>\n  <heading>Reminder</heading>\n  <body>Don't forget me this weekend!</body>\n</note>",
+                            "responseType": "xml"
+                        },
+                        {
+                            "id": "9e331b2b-1069-478b-9cc1-3836b05d3286",
+                            "statusCode": "",
+                            "body": {},
+                            "responseType": "json"
+                        }
+                    ]
+                }
+            ],
+            "proxyUrl": ""
         }
     ]
 }

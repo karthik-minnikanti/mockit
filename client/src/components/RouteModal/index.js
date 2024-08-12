@@ -5,6 +5,10 @@ import { HttpMethods, StatusCodes } from '../../utils/consts';
 import { updateRoute as updateRouteRequest, createNewRoute } from '../../utils/routes-api';
 import faker from 'faker';
 import uuid from 'uuid/v4';
+import AceEditor from 'react-ace';
+
+import 'ace-builds/src-noconflict/mode-xml';
+import 'ace-builds/src-noconflict/theme-github';
 
 const HTTP_METHOD_LIST = [
   HttpMethods.GET,
@@ -31,17 +35,32 @@ const STATUS_CODES = [
 ];
 
 const Modal = function (props) {
-  const { onClose = () => {}, route: editedRoute } = props;
+  const { onClose = () => { }, route: editedRoute } = props;
 
   const [route, updateRoute] = useState(editedRoute.route || '');
   const [httpMethod, updateHttpMethod] = useState(editedRoute.httpMethod || '');
   const [statusCode, updateStatusCode] = useState(editedRoute.statusCode || '');
   const [delay, updateDelay] = useState(editedRoute.delay || '0');
-  const [payload, updatePayload] = useState(editedRoute.payload || {});
+  const [payload, updatePayload] = useState(() => {
+    if (editedRoute.responseType === 'xml') {
+      return editedRoute.payload || '<root></root>';
+    } else {
+      return typeof editedRoute.payload === 'string'
+        ? editedRoute.payload
+        : JSON.stringify(editedRoute.payload || {}, null, 2);
+    }
+  });
   const [disabled, updateDisabled] = useState(editedRoute.disabled || false);
   const [headers, updateHeaders] = useState(editedRoute.headers || []);
-  const [conditions, updateConditions] = useState(editedRoute.conditions || []);
+  const [conditions, updateConditions] = useState(editedRoute.conditions.map(condition => ({
+    ...condition,
+    responses: condition.responses.map(response => ({
+      ...response,
+      responseType: response.responseType || 'json'
+    }))
+  })) || []);
   const [proxyUrl, updateProxyUrl] = useState(editedRoute.proxyUrl || '');
+  const [responseType, setResponseType] = useState(editedRoute.responseType || 'json');
 
   const [expandedConditions, setExpandedConditions] = useState({});
 
@@ -76,7 +95,6 @@ const Modal = function (props) {
     });
     updateConditions(updatedConditions);
   };
-
   const saveChanges = async () => {
     try {
       const cleanedHeaders = headers.filter(({ header, value }) => header !== '' && value !== '');
@@ -87,7 +105,8 @@ const Modal = function (props) {
         httpMethod,
         statusCode,
         delay,
-        payload,
+        payload: responseType === 'json' ? JSON.parse(payload) : payload,
+        responseType, // Include the response type
         disabled,
         headers: cleanedHeaders,
         conditions: cleanedConditions,
@@ -236,16 +255,52 @@ const Modal = function (props) {
           <div className="field mt10">
             <label className="label">Response</label>
             <div className="control">
-              <JSONInput
-                placeholder={payload || {}}
-                onChange={(e) => updatePayload(e.jsObject)}
-                height="120px"
-                width="100%"
-                locale="en-gb"
-              />
+              <div className="select mb-2">
+                <select
+                  value={responseType}
+                  onChange={(e) => {
+                    const newType = e.target.value;
+                    setResponseType(newType);
+                    updatePayload(newType === 'json' ? '{}' : '<root></root>');
+                  }}
+                >
+                  <option value="json">JSON</option>
+                  <option value="xml">XML</option>
+                </select>
+              </div>
+              {responseType === 'json' ? (
+                <JSONInput
+                  placeholder={JSON.parse(payload)}
+                  onChange={(e) => updatePayload(JSON.stringify(e.jsObject, null, 2))}
+                  height="120px"
+                  width="100%"
+                  locale="en-gb"
+                />
+              ) : (
+                <AceEditor
+                  mode="xml"
+                  theme="github"
+                  onChange={(value) => updatePayload(value)}
+                  value={typeof payload === 'string' ? payload : ''}
+                  name="xml-editor"
+                  editorProps={{ $blockScrolling: true }}
+                  setOptions={{
+                    showLineNumbers: true,
+                    tabSize: 2,
+                  }}
+                  height="120px"
+                  width="100%"
+                />
+              )}
               <a
                 className="button is-small is-pulled-right random-data is-primary is-inverted"
-                onClick={() => updatePayload(faker.helpers.userCard())}
+                onClick={() => {
+                  if (responseType === 'json') {
+                    updatePayload(JSON.stringify(faker.helpers.userCard(), null, 2));
+                  } else {
+                    updatePayload('<user><name>John Doe</name><email>john@example.com</email></user>');
+                  }
+                }}
                 aria-label="route-randomly-generate-data"
               >
                 Randomly Generate Data
@@ -331,17 +386,52 @@ const Modal = function (props) {
                               </div>
                               <div className="field">
                                 <label className="label">Response Body</label>
-                                <JSONInput
-                                  placeholder={response.body || {}}
-                                  onChange={(e) =>
-                                    updateResponse(condition.id, response.id, {
-                                      body: e.jsObject
-                                    })
-                                  }
-                                  height="120px"
-                                  width="100%"
-                                  locale="en-gb"
-                                />
+                                <div className="select mb-2">
+                                  <select
+                                    value={response.responseType || 'json'}
+                                    onChange={(e) =>
+                                      updateResponse(condition.id, response.id, {
+                                        responseType: e.target.value,
+                                        body: e.target.value === 'json' ? '{}' : '<root></root>'
+                                      })
+                                    }
+                                  >
+                                    <option value="json">JSON</option>
+                                    <option value="xml">XML</option>
+                                  </select>
+                                </div>
+                                {(editedRoute.responseType || response.responseType || 'json') === 'json' ? (
+                                  <JSONInput
+                                    placeholder={JSON.parse(response.body || '{}')}
+                                    onChange={(e) =>
+                                      updateResponse(condition.id, response.id, {
+                                        body: JSON.stringify(e.jsObject, null, 2)
+                                      })
+                                    }
+                                    height="120px"
+                                    width="100%"
+                                    locale="en-gb"
+                                  />
+                                ) : (
+                                  <AceEditor
+                                    mode="xml"
+                                    theme="github"
+                                    onChange={(value) =>
+                                      updateResponse(condition.id, response.id, {
+                                        body: value
+                                      })
+                                    }
+                                    value={typeof response.body === 'string' ? response.body : ''}
+                                    name={`xml-editor-${response.id}`}
+                                    editorProps={{ $blockScrolling: true }}
+                                    setOptions={{
+                                      showLineNumbers: true,
+                                      tabSize: 2,
+                                    }}
+                                    height="120px"
+                                    width="100%"
+                                  />
+                                )}
                               </div>
                               <button
                                 className="button is-danger is-small mt5"
@@ -359,12 +449,12 @@ const Modal = function (props) {
                             conditions.map((c) =>
                               c.id === condition.id
                                 ? {
-                                    ...c,
-                                    responses: [
-                                      ...c.responses,
-                                      { id: uuid(), statusCode: '', body: {} }
-                                    ]
-                                  }
+                                  ...c,
+                                  responses: [
+                                    ...c.responses,
+                                    { id: uuid(), statusCode: '', body: {} }
+                                  ]
+                                }
                                 : c
                             )
                           )}
