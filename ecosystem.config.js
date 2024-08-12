@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'server',
+      name: 'mockit-server',
       script: './server/src/index.js',
       instances: '1',
       exec_mode: 'cluster',
@@ -12,8 +12,8 @@ module.exports = {
       },
     },
     {
-      name: 'client',
-      script: './path/to/client.js',
+      name: 'mockit-client',
+      script: 'npm run start',
       instances: '1',
       exec_mode: 'cluster',
       watch: false,
