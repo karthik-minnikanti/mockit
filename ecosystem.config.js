@@ -8,10 +8,7 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: 'development',
-        PUBLIC_URL: 'https://k811-dev.wyreless.org/mock',
-        REACT_APP_PUBLIC_URL: 'https://k811-dev.wyreless.org/mock',
-        REACT_APP_MOCKIT_API_URL: 'https://k811-dev.wyreless.org/mock/api',
-        REACT_APP_MOCKIT_SERVER_URL: 'https://k811-dev.wyreless.org/mockit'
+        PORT: 3223
       },
     },
     {
@@ -22,7 +19,10 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: 'development',
-        PORT: 3223
+        PUBLIC_URL: 'https://k811-dev.wyreless.org/mock',
+        REACT_APP_PUBLIC_URL: 'https://k811-dev.wyreless.org/mock',
+        REACT_APP_MOCKIT_API_URL: 'https://k811-dev.wyreless.org/mock/api',
+        REACT_APP_MOCKIT_SERVER_URL: 'https://k811-dev.wyreless.org/mockit'
       },
     },
     {
