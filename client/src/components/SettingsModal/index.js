@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { settings as applicationSettings } from '../../config/routes.json';
 import { updateSettings } from '../../utils/routes-api';
 
 const SettingsModal = function ({
-  onClose = () => {},
-  onConfirm = () => {},
+  onClose = () => { },
+  onConfirm = () => { },
   heading,
   children,
   settings: propSettings
 } = {}) {
 
-  let [settings, setSettings] = useState(applicationSettings);
+  let [settings, setSettings] = useState({});
 
   const {
     features: { chaosMonkey, cors, authentication, groupedRoutes } = {}

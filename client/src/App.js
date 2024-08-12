@@ -3,7 +3,6 @@ import useScrollReval from './hooks/useScrollReveal';
 import RouteListStack from './components/RouteListStack';
 import RouteListGroup from './components/RouteListGroup';
 import Logo from './components/Logo';
-import { version } from '../package.json';
 
 import { buildRoute, deleteRoute, geteRoute, getSettings } from './utils/routes-api';
 
@@ -11,7 +10,7 @@ import RouteModal from './components/RouteModal';
 import SettingsModal from './components/SettingsModal';
 import ConfirmationDialog from './components/ConfirmationDialog';
 
-import { routes as configRoutes } from './config/routes.json';
+import configRoutes from './config/routes';
 
 import './scss/index.scss';
 
@@ -144,7 +143,7 @@ export default function ({ customRoutes }) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <strong>MockIt v{version} </strong>
+              <strong>MockIt </strong>
             </a>{' '}
             an OpenSource tool developed by{' '}
             <a

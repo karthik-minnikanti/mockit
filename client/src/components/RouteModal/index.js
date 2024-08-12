@@ -4,11 +4,7 @@ import HeaderInput from '../HeaderInput';
 import { HttpMethods, StatusCodes } from '../../utils/consts';
 import { updateRoute as updateRouteRequest, createNewRoute } from '../../utils/routes-api';
 import faker from 'faker';
-import uuid from 'uuid/v4';
-import AceEditor from 'react-ace';
-
-import 'ace-builds/src-noconflict/mode-xml';
-import 'ace-builds/src-noconflict/theme-github';
+import { v4 as uuid } from 'uuid';
 
 const HTTP_METHOD_LIST = [
   HttpMethods.GET,
@@ -52,19 +48,25 @@ const Modal = function (props) {
   });
   const [disabled, updateDisabled] = useState(editedRoute.disabled || false);
   const [headers, updateHeaders] = useState(editedRoute.headers || []);
-  const [conditions, updateConditions] = useState(editedRoute.conditions.map(condition => ({
-    ...condition,
-    responses: condition.responses.map(response => ({
-      ...response,
-      responseType: response.responseType || 'json'
-    }))
-  })) || []);
+  const [conditions, updateConditions] = useState(() => {
+    if (editedRoute.conditions) {
+      return editedRoute.conditions.map(condition => ({
+        ...condition,
+        responses: condition.responses.map(response => ({
+          ...response,
+          responseType: response.responseType || 'json'
+        }))
+      }));
+    }
+    return [];
+  });
   const [proxyUrl, updateProxyUrl] = useState(editedRoute.proxyUrl || '');
   const [responseType, setResponseType] = useState(editedRoute.responseType || 'json');
 
   const [expandedConditions, setExpandedConditions] = useState({});
 
-  const isNewRoute = editedRoute.id === undefined;
+  const isNewRoute = !editedRoute || editedRoute.id === undefined;
+
   const modalTitle = isNewRoute ? 'Add Route' : 'Edit Route';
 
   const setHeader = (updatedHeader) => {
@@ -95,6 +97,7 @@ const Modal = function (props) {
     });
     updateConditions(updatedConditions);
   };
+
   const saveChanges = async () => {
     try {
       const cleanedHeaders = headers.filter(({ header, value }) => header !== '' && value !== '');
@@ -102,23 +105,22 @@ const Modal = function (props) {
       const data = {
         ...editedRoute,
         route,
-        httpMethod,
+        httpMethod,  // Make sure this line is present
         statusCode,
         delay,
         payload: responseType === 'json' ? JSON.parse(payload) : payload,
-        responseType, // Include the response type
+        responseType,
         disabled,
         headers: cleanedHeaders,
         conditions: cleanedConditions,
         proxyUrl
       };
       isNewRoute ? await createNewRoute(data) : await updateRouteRequest(data);
-      onClose(); // Close the modal after saving
+      onClose();
     } catch (error) {
       console.log('Error', error);
     }
   };
-
 
   const removeResponseFromCondition = (conditionId, responseId) => {
     const updatedConditions = conditions.map((condition) => {
@@ -176,79 +178,24 @@ const Modal = function (props) {
               <span className="icon is-small is-left">/</span>
             </div>
           </div>
-          <div className="field-body">
-            <div className="field">
-              <label htmlFor="route-http" className="label">
-                HTTP Method
-              </label>
-              <div className="control">
-                <div className="select">
-                  <select
-                    aria-label="route-http"
-                    value={httpMethod}
-                    onChange={(e) => updateHttpMethod(e.currentTarget.value)}
-                  >
-                    {HTTP_METHOD_LIST.map((method) => (
-                      <option key={method} value={method}>
-                        {method}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Status Code</label>
-              <div className="control">
-                <div className="select">
-                  <select
-                    aria-label="route-statuscode"
-                    value={statusCode}
-                    onChange={(e) => updateStatusCode(e.currentTarget.value)}
-                  >
-                    <optgroup aria-label="2xx" label="2xx">
-                      {statusCodeStartingWith('2').map((routeStatusCode) => (
-                        <option key={routeStatusCode} value={routeStatusCode}>
-                          {routeStatusCode}
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup aria-label="4xx" label="4xx">
-                      {statusCodeStartingWith('4').map((routeStatusCode) => (
-                        <option key={routeStatusCode} value={routeStatusCode}>
-                          {routeStatusCode}
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup aria-label="5xx" label="5xx">
-                      {statusCodeStartingWith('5').map((routeStatusCode) => (
-                        <option key={routeStatusCode} value={routeStatusCode}>
-                          {routeStatusCode}
-                        </option>
-                      ))}
-                    </optgroup>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Delay </label>
-              <div className="control">
-                <div className="select">
-                  <select
-                    aria-label="route-delay"
-                    value={delay}
-                    onChange={(e) => updateDelay(e.currentTarget.value)}
-                  >
-                    <option value="0">0</option>
-                    <option value="250">250</option>
-                    <option value="500">500</option>
-                    <option value="1000">1000</option>
-                    <option value="1500">1500</option>
-                    <option value="2000">2000</option>
-                    <option value="5000">5000</option>
-                  </select>
-                </div>
+
+          <div className="field">
+            <label htmlFor="route-http" className="label">
+              HTTP Method
+            </label>
+            <div className="control">
+              <div className="select">
+                <select
+                  aria-label="route-http"
+                  value={httpMethod}
+                  onChange={(e) => updateHttpMethod(e.currentTarget.value)}
+                >
+                  {HTTP_METHOD_LIST.map((method) => (
+                    <option key={method} value={method}>
+                      {method}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -277,19 +224,16 @@ const Modal = function (props) {
                   locale="en-gb"
                 />
               ) : (
-                <AceEditor
-                  mode="xml"
-                  theme="github"
-                  onChange={(value) => updatePayload(value)}
-                  value={typeof payload === 'string' ? payload : ''}
-                  name="xml-editor"
-                  editorProps={{ $blockScrolling: true }}
-                  setOptions={{
-                    showLineNumbers: true,
-                    tabSize: 2,
+                <textarea
+                  value={payload}
+                  onChange={(e) => updatePayload(e.target.value)}
+                  style={{
+                    width: '100%',
+                    height: '120px',
+                    fontFamily: 'monospace',
+                    whiteSpace: 'pre',
+                    overflowX: 'auto'
                   }}
-                  height="120px"
-                  width="100%"
                 />
               )}
               <a
@@ -400,9 +344,9 @@ const Modal = function (props) {
                                     <option value="xml">XML</option>
                                   </select>
                                 </div>
-                                {(editedRoute.responseType || response.responseType || 'json') === 'json' ? (
+                                {(response.responseType || 'json') === 'json' ? (
                                   <JSONInput
-                                    placeholder={JSON.parse(response.body || '{}')}
+                                    placeholder={typeof response.body === 'object' ? response.body : JSON.parse(response.body || '{}')}
                                     onChange={(e) =>
                                       updateResponse(condition.id, response.id, {
                                         body: JSON.stringify(e.jsObject, null, 2)
@@ -413,23 +357,20 @@ const Modal = function (props) {
                                     locale="en-gb"
                                   />
                                 ) : (
-                                  <AceEditor
-                                    mode="xml"
-                                    theme="github"
-                                    onChange={(value) =>
+                                  <textarea
+                                    value={typeof response.body === 'string' ? response.body : '<root></root>'}
+                                    onChange={(e) =>
                                       updateResponse(condition.id, response.id, {
-                                        body: value
+                                        body: e.target.value
                                       })
                                     }
-                                    value={typeof response.body === 'string' ? response.body : ''}
-                                    name={`xml-editor-${response.id}`}
-                                    editorProps={{ $blockScrolling: true }}
-                                    setOptions={{
-                                      showLineNumbers: true,
-                                      tabSize: 2,
+                                    style={{
+                                      width: '100%',
+                                      height: '120px',
+                                      fontFamily: 'monospace',
+                                      whiteSpace: 'pre',
+                                      overflowX: 'auto'
                                     }}
-                                    height="120px"
-                                    width="100%"
                                   />
                                 )}
                               </div>

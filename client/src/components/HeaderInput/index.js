@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 export default function ({
   index,
   data = {},
-  onBlur = () => {},
-  onRemove = () => {}
+  onBlur = () => { },
+  onRemove = () => { }
 } = {}) {
   const { id = uuid(), header: initialHeader, value: initialValue } = data;
 

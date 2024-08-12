@@ -18,28 +18,7 @@
             "httpMethod": "GET",
             "statusCode": "200",
             "delay": "0",
-            "payload": {
-                "name": "Carolina Streich",
-                "username": "Brionna_Ratke",
-                "email": "Anya_Collins@yahoo.com",
-                "address": {
-                    "street": "Otilia Ford",
-                    "suite": "Suite 318",
-                    "city": "Lemketon",
-                    "zipcode": "30872-5270",
-                    "geo": {
-                        "lat": "-49.9512",
-                        "lng": "-46.7559"
-                    }
-                },
-                "phone": "1-135-091-7386",
-                "website": "kyleigh.org",
-                "company": {
-                    "name": "Hegmann, Stiedemann and Corwin",
-                    "catchPhrase": "Quality-focused zero administration initiative",
-                    "bs": "vertical transition architectures"
-                }
-            },
+            "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <note>\n  <to>Tove</to>\n  <from>Jani</from>\n  <heading>Reminder</heading>\n  <body>Don't forget me this weekend!</body>\n</note>",
             "disabled": false,
             "headers": [],
             "conditions": [
@@ -50,7 +29,8 @@
                         {
                             "id": "86f3c7fd-4a3a-4238-abe7-74077e3467c2",
                             "statusCode": "",
-                            "body": {}
+                            "body": {},
+                            "responseType": "json"
                         }
                     ]
                 },
@@ -61,12 +41,48 @@
                         {
                             "id": "1bb5677b-4f1b-4110-bb6b-b298e3944ff5",
                             "statusCode": "",
-                            "body": {}
+                            "body": {},
+                            "responseType": "json"
                         }
                     ]
                 }
             ],
-            "proxyUrl": ""
+            "proxyUrl": "",
+            "children": {
+                "xml": {
+                    "id": "2ac7c58d-9de8-47c0-8bcc-60afa135d6c9",
+                    "route": "/test/xml",
+                    "httpMethod": "POST",
+                    "statusCode": "200",
+                    "delay": "0",
+                    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bookstore>\n  <book category=\"cooking\">\n    <title lang=\"en\">Everyday Italian</title>\n    <author>Giada De Laurentiis</author>\n    <year>2005</year>\n    <price>30.00</price>\n  </book>\n  <book category=\"children\">\n    <title lang=\"en\">Harry Potter</title>\n    <author>J K. Rowling</author>\n    <year>2005</year>\n    <price>29.99</price>\n  </book>\n  <book category=\"web\">\n    <title lang=\"en\">Learning XML</title>\n    <author>Erik T. Ray</author>\n    <year>2003</year>\n    <price>39.95</price>\n  </book>\n</bookstore>",
+                    "responseType": "xml",
+                    "disabled": false,
+                    "headers": [],
+                    "conditions": [
+                        {
+                            "id": "8fda3d9b-8119-4ba6-bb4d-798f47719df2",
+                            "condition": "Test",
+                            "responses": [
+                                {
+                                    "id": "3e9e730e-49da-4507-815f-db021e093f17",
+                                    "statusCode": "",
+                                    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n  <note>\n  <to>Tove</to>\n  <from>Jani</from>\n  <heading>Reminder</heading>\n  <body>Don't forget me this weekend!</body>\n</note>",
+                                    "responseType": "xml"
+                                },
+                                {
+                                    "id": "9e331b2b-1069-478b-9cc1-3836b05d3286",
+                                    "statusCode": "",
+                                    "body": {},
+                                    "responseType": "json"
+                                }
+                            ]
+                        }
+                    ],
+                    "proxyUrl": ""
+                }
+            },
+            "responseType": "xml"
         },
         {
             "id": "2ac7c58d-9de8-47c0-8bcc-60afa135d6c9",
@@ -98,6 +114,36 @@
                     ]
                 }
             ],
+            "proxyUrl": ""
+        },
+        {
+            "id": "33a6db26-a723-4cfe-baa4-52c269cd1efc",
+            "route": "/test/xml2",
+            "httpMethod": "GET",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "responseType": "json",
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
+            "proxyUrl": ""
+        },
+        {
+            "id": "6d8a0a48-aafe-4563-af98-3fb3cdc76a47",
+            "route": "/test/xml3",
+            "httpMethod": "POST",
+            "statusCode": "200",
+            "delay": "0",
+            "payload": {
+                "test": true
+            },
+            "responseType": "json",
+            "disabled": false,
+            "headers": [],
+            "conditions": [],
             "proxyUrl": ""
         }
     ]
