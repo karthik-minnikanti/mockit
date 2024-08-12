@@ -1,7 +1,4 @@
-import url from 'url';
 import { HttpMethods, StatusCodes } from '../consts';
-
-const host = process.env.REACT_APP_MOCKIT_API_URL || 'localhost';
 
 export const buildRoute = () => ({
   route: '/newRoute',
@@ -12,7 +9,6 @@ export const buildRoute = () => ({
 });
 
 export const createNewRoute = async (route) => {
-  console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL, host)
   return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'POST',
     headers: {
@@ -23,7 +19,6 @@ export const createNewRoute = async (route) => {
 };
 
 export const updateRoute = async (data) => {
-  console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL)
   return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'PUT',
     headers: {
@@ -34,7 +29,6 @@ export const updateRoute = async (data) => {
 };
 
 export const deleteRoute = async (data) => {
-  console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL)
   return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'DELETE',
     headers: {
@@ -46,7 +40,6 @@ export const deleteRoute = async (data) => {
 
 
 export const geteRoute = async (data) => {
-  console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL)
   const rotues = await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'GET',
     headers: {
