@@ -13,7 +13,7 @@ export const buildRoute = () => ({
 
 export const createNewRoute = async (route) => {
   console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL, host)
-  return await fetch(url.resolve(process.env.REACT_APP_MOCKIT_API_URL, '/route'), {
+  return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ export const createNewRoute = async (route) => {
 
 export const updateRoute = async (data) => {
   console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL)
-  return await fetch(url.resolve(process.env.REACT_APP_MOCKIT_API_URL, '/route'), {
+  return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export const updateRoute = async (data) => {
 
 export const deleteRoute = async (data) => {
   console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL)
-  return await fetch(url.resolve(process.env.REACT_APP_MOCKIT_API_URL, '/route'), {
+  return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ export const deleteRoute = async (data) => {
 
 export const geteRoute = async (data) => {
   console.log("-------------", process.env.REACT_APP_MOCKIT_API_URL)
-  const rotues = await fetch(url.resolve(process.env.REACT_APP_MOCKIT_API_URL, '/route'), {
+  const rotues = await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/route`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ export const geteRoute = async (data) => {
 
 
 export const updateSettings = async (settings) => {
-  return await fetch(url.resolve(process.env.REACT_APP_MOCKIT_API_URL, '/settings'), {
+  return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/settings`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export const updateSettings = async (settings) => {
 };
 
 export const getSettings = async () => {
-  return await fetch(url.resolve(process.env.REACT_APP_MOCKIT_API_URL, '/settings'), {
+  return await fetch(`${process.env.REACT_APP_MOCKIT_API_URL}/settings`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
