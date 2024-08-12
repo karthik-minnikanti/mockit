@@ -5,7 +5,7 @@ module.exports = {
       cwd: '/root/k8-mock-server/server',
       script: 'npm run start',
       instances: '1',
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       watch: false,
       env: {
         NODE_ENV: 'development',
@@ -17,7 +17,7 @@ module.exports = {
       cwd: '/root/k8-mock-server/client',
       script: 'npm run start',
       instances: '1',
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       watch: false,
       env: {
         NODE_ENV: 'development',
@@ -32,7 +32,7 @@ module.exports = {
       cwd: '/root/k8-mock-server/mockit-routes',
       script: 'npm run start',
       instances: '1',
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       watch: true,
       env: {
         NODE_ENV: 'development',
