@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const cors = require('cors');
 const axios = require("axios")
+require('dotenv').config()
 
 const port = process.env.PORT || 3000;
 
@@ -49,19 +50,19 @@ routes.forEach((route) => {
     app[method](path, async (req, res) => {
       let isConditionMet = false;
       let response = null;
-    
-      for (const conditionData of conditions) {    
+
+      for (const conditionData of conditions) {
         if (JSON.stringify(req.body)?.includes(conditionData?.condition)) {
           isConditionMet = true;
           response = conditionData.responses[0]?.body;
           break;
         }
       }
-    
+
       if (isConditionMet) {
         return res.status(statusCode).send(response);
       } else {
-        if(proxyUrl) {
+        if (proxyUrl) {
 
           const proxyResponse = await axios({
             method: method,
